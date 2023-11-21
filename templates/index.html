@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rate People</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        #ratingForm {
+            height: 50vh;
+        }
+        .col-form-label {
+            font-size: 14px;
+        }
+        select {
+            font-size: 14px;
+            padding: 0.375rem 0.75rem;
+        }
+    </style>
+</head>
+<body style="background-color: gray;"> 
+    <div class="container" >
+        <form action="/submit" method="post" id="ratingForm">
+            <ol id="peopleList" class="list-group">
+                {% for person in people %}
+                <li class="list-group-item">
+                    <div class="form-group row">
+                        <label for="{{ person }}" class="col-sm-3 col-form-label">{{ person }}</label>
+                        <div class="col-sm-9">
+                            <select id="{{ person }}" name="{{ person }}" onchange="updateTextValue(this.value, '{{ person }}')" class="form-control">
+                                <option value="0" style="color:red">0</option>
+                                <option value="1" style="color:orange">1</option>
+                                <option value="2" style="color:yellow">2</option>
+                                <option value="3" style="color:green">3</option>
+                                <option value="4" style="color:blue">4</option>
+                                <option value="5" style="color:indigo" selected>5</option>
+                                <option value="6" style="color:violet">6</option>
+                                <option value="7" style="color:brown">7</option>
+                                <option value="8" style="color:grey">8</option>
+                                <option value="9" style="color:black">9</option>
+                                <option value="10" style="color:white; background-color:black">10</option>
+                            </select>
+                        </div>
+                    </div>
+                    <span id="{{ person }}-value" hidden>5</span>
+                </li>
+                {% endfor %}
+            </ol>
+            <div class="form-group row">
+                <div class="col-sm-9 offset-sm-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Function to update the value displayed next to the dropdown select
+        function updateTextValue(val, id) {
+            document.getElementById(id + "-value").innerText = val;
+            sortPeople();
+        }
+
+        // Function to sort the people list based on ratings
+        function sortPeople() {
+            let list = document.getElementById("peopleList");
+            let items = list.getElementsByTagName("li");
+            let sortedItems = Array.from(items).sort((a, b) => {
+                let aValue = parseInt(a.querySelector("select").value);
+                let bValue = parseInt(b.querySelector("select").value);
+                return bValue - aValue;
+            });
+            for (let item of sortedItems) {
+                list.appendChild(item);
+            }
+        }
+    </script>
+</body>
+</html>
