@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, url_for
 
 app = Flask(__name__)
 
-# List of people to rate
+
 people = [
     "Sanjana Mandarapu", 
     "Bhuvan satya",
@@ -14,20 +14,20 @@ people = [
     "Pavan Kumar Dokku",
 ]
 
-# File to store ratings
+
 csv_filename = 'data/webdev.csv'
 
-# Initialize CSV file with people names as headers
+
 with open(csv_filename, mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(people)
 
-# Render the HTML template with the list of people
+
 @app.route('/')
 def index():
     return render_template('index.html', people=people)
 
-# Handle form submission with ratings
+
 @app.route('/submit', methods=['POST'])
 def submit():
     ratings = {person: int(request.form[person]) for person in people}
